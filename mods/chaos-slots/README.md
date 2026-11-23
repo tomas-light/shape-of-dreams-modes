@@ -12,4 +12,6 @@ Put the extra Essence slots you earn from Corrupted Chaos on the Memories you us
 
 ## Демонстрация / Gameplay
 
+![results](images/chaos-slots-results.jpg)
+
 ![Chaos Slots — ячейки Искажённого Хаоса в игре / extra Essence slots in action](images/chaos-slots-demo.gif)
