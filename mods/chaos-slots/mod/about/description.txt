@@ -1,6 +1,11 @@
-Distribute up to four extra Essence slots earned from Corrupted Chaos among your Q, W, E and R Memories. In co-op, each player has their own four-slot limit. Bonus slots form an arc above each Memory. Drag the petal above a bonus slot onto a highlighted Memory to move the slot and equipped Essence. Each player's layout follows the host's run save.
+[h2]Русский[/h2]
 
-Solo and co-op play on the Steam edition. Enable the same version of Chaos Slots on the host and each guest. Use the same player profiles when continuing a co-op run. Open the Memory editor (hold Left Ctrl by default) to drag slots. Use Chaos Slots on its own if you have other mods that change Essence slot counts.
+Дополнительные ячейки эссенций от Искажённого Хаоса можно ставить туда, где они нужнее. Вложите все четыре в одно воспоминание или распределите их между воспоминаниями. У каждого игрока свой лимит в четыре дополнительные ячейки.
 
-[h2]Gameplay demo[/h2]
-[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/9ca9d19664a3bb8976fce9b3877800b3a7e09c98/mods/chaos-slots/images/chaos-slots-demo.gif[/img]
+[h2]English[/h2]
+
+Put the extra Essence slots you earn from Corrupted Chaos on the Memories you use most. You can put all four on one Memory or spread them across Memories. Each player can earn up to four extra slots in total.
+
+[h2]Демонстрация / Gameplay[/h2]
+
+[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/1adb7b3fb956059a4301499867fc148c2f4e10ba/mods/chaos-slots/images/chaos-slots-demo.gif[/img]
