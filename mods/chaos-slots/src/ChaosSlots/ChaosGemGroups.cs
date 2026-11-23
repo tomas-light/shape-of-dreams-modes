@@ -88,6 +88,7 @@ namespace ChaosSlots
                 expanded.name = $"ChaosSlots {SlotRules.BaseSlots + bonusCount}";
                 expanded.SetActive(false);
                 expanded.transform.SetParent(nativeThree.transform.parent, false);
+                ChaosGemMaterials.RestoreTemplates(nativeThree, expanded);
                 var baseSlots = expanded.GetComponentsInChildren<UI_InGame_GemSlot>(true);
                 var sample = Array.Find(baseSlots, slot => slot.slotIndex == 1);
                 if (sample == null)
