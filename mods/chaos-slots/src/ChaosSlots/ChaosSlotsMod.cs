@@ -18,6 +18,8 @@ namespace ChaosSlots
             ChaosSlotHandle.CancelDrag();
             ChaosSlotNetwork.ShutDown();
             ChaosGemGroups.RestoreAll();
+            ChaosResultFrame.RestoreAll();
+            ChaosResultSlots.RestoreAll();
             ChaosPetal.Release();
             harmony.UnpatchAll(harmony.Id);
         }
