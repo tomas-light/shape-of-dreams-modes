@@ -1,0 +1,3 @@
+Manual test room for Chaos Slots. Start a new solo or co-op Shape of Dreams run with both mods enabled on each client. The host populates the first room with five Corrupted Chaos shrines with a guaranteed Essence-slot reward, eight different Essences, and up to two Memories to equip in W and E. Collect the items and use the shrines normally. The fifth shrine can be used to check each player's four-slot limit.
+
+Use a separate profile for test runs. Keep both mods enabled when continuing a test run.

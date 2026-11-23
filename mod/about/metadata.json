@@ -1,0 +1,7 @@
+{
+  "id": "com.pikac.chaosslots",
+  "name": "Chaos Slots",
+  "author": "pikac",
+  "modVer": "0.2.0",
+  "assemblies": ["lib/ChaosSlots.dll"]
+}

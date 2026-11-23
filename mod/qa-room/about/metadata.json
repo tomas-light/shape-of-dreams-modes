@@ -1,0 +1,7 @@
+{
+  "id": "com.pikac.chaosslots.qaroom",
+  "name": "Chaos Slots Test Room",
+  "author": "pikac",
+  "modVer": "0.2.0",
+  "assemblies": ["lib/ChaosSlots.QaRoom.dll"]
+}
