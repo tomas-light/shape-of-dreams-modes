@@ -28,9 +28,11 @@ function Pack-Mod([string] $ProjectName, [string] $PackageName, [string] $AboutP
     foreach ($file in @('metadata.json', 'description.txt')) {
         Copy-Item -LiteralPath (Join-Path $metadata $file) -Destination $about
     }
-    $preview = Join-Path $metadata 'preview.png'
-    if (Test-Path -LiteralPath $preview -PathType Leaf) {
-        Copy-Item -LiteralPath $preview -Destination $about
+    foreach ($file in @('preview.png', 'icon.png')) {
+        $image = Join-Path $metadata $file
+        if (Test-Path -LiteralPath $image -PathType Leaf) {
+            Copy-Item -LiteralPath $image -Destination $about
+        }
     }
     Copy-Item -LiteralPath $assembly -Destination $library
 
