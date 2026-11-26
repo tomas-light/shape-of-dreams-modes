@@ -20,6 +20,14 @@ Install the .NET 10 SDK and the Steam edition of Shape of Dreams. Run the comman
 
 Результат / Output in `artifacts/` — `ConstellationViewer`.
 
+## Effect Breakdown
+
+```bat
+.\mods\effect-breakdown\scripts\Pack-Mod.cmd
+```
+
+Результат / Output in `artifacts/` — `EffectBreakdown`.
+
 ## Путь к игре и установка / Game path and installation
 
 Скрипты ищут игру в стандартной библиотеке Steam. Для другой библиотеки добавьте к команде `-GameDir "D:\SteamLibrary\steamapps\common\Shape of Dreams"` или задайте переменную окружения `SOD_GAME_DIR`. В `artifacts/` появятся папки модов и ZIP-архивы с версиями в названиях. Скопируйте нужную папку мода в каталог `Mods` внутри папки игры и включите мод в главном меню.

@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <GameDir Condition="'$(GameDir)' == ''">$(SOD_GAME_DIR)</GameDir>
+    <GameDir Condition="'$(GameDir)' == ''">C:\Program Files (x86)\Steam\steamapps\common\Shape of Dreams</GameDir>
+    <GameManagedDir>$(GameDir)\Shape of Dreams_Data\Managed</GameManagedDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../src/EffectBreakdown/EffectExpressions.cs" Link="EffectExpressions.cs" />
+    <Compile Include="../../src/EffectBreakdown/EffectDiscovery.cs" Link="EffectDiscovery.cs" />
+    <Compile Include="../../src/EffectBreakdown/TooltipBreakdown.cs" Link="TooltipBreakdown.cs" />
+    <Reference Include="Dew.Core" HintPath="$(GameManagedDir)\Dew.Core.dll" />
+    <Reference Include="Mono.CecilX" HintPath="$(GameManagedDir)\Mono.CecilX.dll" />
+    <None Include="$(GameManagedDir)\Dew.Contents.dll" Link="Dew.Contents.dll" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

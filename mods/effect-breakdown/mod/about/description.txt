@@ -1,0 +1,8 @@
+[h1]Русский[/h1]
+Effect Breakdown добавляет расчёт исцеления, барьеров, урона и перезарядки в подсказки поддерживаемых воспоминаний и эссенций в забеге и в «Дежавю». Мод перечисляет источники поправок и выделяет красным ухудшение результата. Исцеление и барьеры рассчитаны для владельца, а условный урон помечен по типу цели.
+
+[h1]English[/h1]
+Effect Breakdown adds healing, barrier, damage, and cooldown estimates to supported Memory and Essence tooltips during a run and in Déjà Vu. It names the modifiers and highlights penalties in red. Healing and barrier estimates apply to the owner, and conditional damage lists its target type.
+
+[h1]Демонстрация / Gameplay[/h1]
+Луч Света / Beam of Light: 73 HP/s × 1.18 × 0.50 = 43.1 HP/s.
