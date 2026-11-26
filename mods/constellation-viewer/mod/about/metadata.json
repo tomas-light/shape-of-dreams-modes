@@ -1,0 +1,7 @@
+{
+  "id": "com.pikac.constellationviewer",
+  "name": "Constellation Viewer",
+  "author": "pikac",
+  "modVer": "1.0.0",
+  "assemblies": ["lib/ConstellationViewer.dll"]
+}

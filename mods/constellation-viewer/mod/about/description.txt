@@ -1,0 +1,13 @@
+[h2]Русский[/h2]
+
+Посмотрите, какие звёзды выбраны у вашего персонажа, прямо во время забега. Нажмите [b]Созвездия[/b] рядом с панелью характеристик и наведите курсор на звезду. Описание учитывает её текущий уровень и показывает штраф, если звезда установлена в слот другого типа. Окно доступно только для просмотра.
+
+[h2]English[/h2]
+
+See which constellation stars your Traveler has equipped during a run. Click [b]Constellations[/b] beside the character stats and hover over a star. Its description shows the effect at the equipped level, including any penalty from a mismatched slot. The window is read-only.
+
+[h2]Демонстрация / Gameplay[/h2]
+
+[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/main/mods/constellation-viewer/images/constellation-slot-penalty.gif[/img]
+
+[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/main/mods/constellation-viewer/images/constellation-viewer-in-run.gif[/img]
