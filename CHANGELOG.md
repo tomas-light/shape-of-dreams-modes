@@ -123,6 +123,47 @@
 - 提示會顯示星星、難度和清醒夢如何改變治療、護盾、傷害和冷卻時間。可以看到原始數值、最終結果和修正來源。
 - 可在對局中、Déjà Vu 和大廳選擇旅人記憶時查看。支援遊戲的全部 13 種語言。
 
+## Chaos Slots 1.0.1
+
+**Русский**
+В сводке персонажей теперь видны все ячейки эссенций, даже если у одного воспоминания их семь. Бонусные ячейки располагаются дугой над воспоминанием, а карточка игрока увеличивается по высоте, чтобы их вместить. В кооперативе у игроков без мода сохраняется штатная раскладка на четыре ячейки.
+
+**English**
+The player overview now shows every Essence slot, even when a single Memory has seven. Bonus slots form an arc above the Memory, and the player card expands to fit them. In co-op, players without the mod keep the standard four-slot layout.
+
+**Deutsch**
+In der Spielerübersicht sind jetzt alle Essenzplätze sichtbar, auch wenn eine Erinnerung sieben Plätze hat. Zusätzliche Plätze erscheinen in einem Bogen über der Erinnerung, und die Spielerkarte wird entsprechend höher. Im Koop behalten Spieler ohne Mod die Standardanordnung mit vier Plätzen.
+
+**Español (Latinoamérica)**
+El resumen de jugadores ahora muestra todas las ranuras de esencia, incluso cuando un solo recuerdo tiene siete. Las ranuras adicionales forman un arco sobre el recuerdo y la tarjeta del jugador se amplía para darles espacio. En cooperativo, quienes juegan sin el mod conservan la distribución estándar de cuatro ranuras.
+
+**Français**
+La vue d’ensemble des joueurs affiche désormais tous les emplacements d’essence, même lorsqu’un souvenir en compte sept. Les emplacements supplémentaires forment un arc au-dessus du souvenir, et la fiche du joueur s’agrandit pour leur faire de la place. En coopération, les joueurs sans le mod conservent la disposition standard à quatre emplacements.
+
+**Italiano**
+Il riepilogo dei giocatori mostra ora tutti gli slot essenza, anche quando un singolo ricordo ne ha sette. Gli slot aggiuntivi formano un arco sopra il ricordo e la scheda del giocatore si allarga in verticale per contenerli. In cooperativa, chi gioca senza la mod mantiene la disposizione standard a quattro slot.
+
+**日本語**
+プレイヤー一覧で、1つの記憶にスロットが7つある場合でも、すべてのエッセンススロットが表示されるようになりました。追加スロットは記憶の上に弧を描くように並び、その分だけプレイヤーカードが縦に広がります。協力プレイでは、MODを使用していないプレイヤーは従来の4スロット配置のままです。
+
+**한국어**
+이제 플레이어 요약 화면에서 하나의 기억에 슬롯이 7개 있어도 모든 정수 슬롯이 표시됩니다. 추가 슬롯은 기억 위에 호를 그리며 배치되고, 플레이어 카드의 높이가 그만큼 늘어납니다. 협동 플레이에서 모드를 사용하지 않는 플레이어는 기본 4슬롯 배치를 유지합니다.
+
+**Polski**
+Podgląd graczy pokazuje teraz wszystkie gniazda esencji, nawet jeśli jedno wspomnienie ma ich siedem. Dodatkowe gniazda układają się w łuk nad wspomnieniem, a karta gracza zwiększa swoją wysokość, aby je pomieścić. W trybie kooperacji gracze bez moda zachowują standardowy układ czterech gniazd.
+
+**Português (Brasil)**
+O resumo dos jogadores agora mostra todos os espaços de essência, mesmo quando uma única memória tem sete. Os espaços extras formam um arco acima da memória, e o cartão do jogador fica mais alto para acomodá-los. No modo cooperativo, quem joga sem o mod mantém o layout padrão de quatro espaços.
+
+**Türkçe**
+Oyuncu özeti artık tek bir hatırada yedi yuva olsa bile tüm öz yuvalarını gösteriyor. Ek yuvalar hatıranın üstünde yay şeklinde diziliyor ve oyuncu kartı bunlara yer açmak için dikey olarak genişliyor. İş birliği modunda, modu kullanmayan oyuncular standart dört yuvalı düzeni koruyor.
+
+**简体中文**
+现在，即使一项记忆有七个插槽，玩家总览也会显示所有精华插槽。额外插槽呈弧形排列在记忆上方，玩家卡片会增高以容纳这些插槽。联机合作时，未使用此模组的玩家仍沿用标准的四插槽布局。
+
+**繁體中文**
+現在，即使一項記憶有七個欄位，玩家總覽也會顯示所有精華欄位。額外欄位呈弧形排列在記憶上方，玩家卡片會加高以容納這些欄位。連線合作時，未使用此模組的玩家仍沿用標準的四欄位配置。
+
 ## Chaos Slots 1.0.0
 
 **Русский**
