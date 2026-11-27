@@ -93,6 +93,21 @@ internal static class SlotMoveRequestTests
         Assert(true, TryPlan(restored, fresh, out _, lastSequence: 3), "A fresh request still works");
     }
 
+    internal static void UnregisteringAPeerKeepsItsLastSequence()
+    {
+        var peer = new SlotMovePeer();
+        Assert(true, peer.UpdateVersion(SlotMovePeer.EnabledVersion), "A supported hello registers the peer");
+        Assert(true, peer.TryAcceptSequence(4, out _), "A registered peer can move a slot");
+        Assert(true, peer.UpdateVersion(SlotMovePeer.DisabledVersion), "A disable hello unregisters the peer");
+        Assert(false, peer.Enabled, "An unregistered peer is excluded from the scoreboard list");
+        Assert(false, peer.TryAcceptSequence(5, out _), "An unregistered peer cannot move slots");
+        Assert(false, peer.UpdateVersion(byte.MaxValue), "Unknown versions cannot register again");
+        Assert(true, peer.UpdateVersion(SlotMovePeer.EnabledVersion), "The same connection can register again");
+        Assert(false, peer.TryAcceptSequence(4, out _), "Registering again cannot replay a completed move");
+        Assert(true, peer.TryAcceptSequence(5, out ulong lastSequence), "A fresh move can proceed after registration");
+        Assert(true, lastSequence == 4, "The accepted sequence before unregistering is preserved");
+    }
+
     private static bool TryPlan(SlotLayout layout, SlotMoveRequest request, out SlotMove move,
         uint gemNetId = 42, ulong lastSequence = 0) =>
         SlotMoveRequestRules.TryPlan(layout, gemNetId, lastSequence, request, out move);

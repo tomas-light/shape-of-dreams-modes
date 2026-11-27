@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using HarmonyLib;
 using Mirror;
 using UnityEngine;
@@ -9,9 +10,9 @@ namespace ChaosSlots
     internal static class ChaosSlotNetwork
     {
         private const string CapabilityKey = "dev.pikac.chaos-slots.live-protocol";
+        private const string ScoreboardPeersKey = "dev.pikac.chaos-slots.scoreboard-peers";
         private const string CustomDataSaveKey = "GameSettingsManager::customData";
         private const string CapabilityPrefix = "1:";
-        private const byte ProtocolVersion = 1;
 
         private readonly struct HelloV1 : NetworkMessage
         {
@@ -31,14 +32,10 @@ namespace ChaosSlots
             internal SlotMoveRequest Request { get; }
         }
 
-        private sealed class Peer
-        {
-            internal ulong LastSequence;
-        }
-
-        private static readonly Dictionary<NetworkConnectionToClient, Peer> Peers = new();
+        private static readonly Dictionary<NetworkConnectionToClient, SlotMovePeer> Peers = new();
         private static bool _serving;
         private static string _serverCapability;
+        private static string _publishedScoreboardPeers;
         private static GameSettingsManager _advertisedSettings;
         private static NetworkConnection _helloConnection;
         private static string _helloCapability;
@@ -60,8 +57,23 @@ namespace ChaosSlots
                 return false;
             if (NetworkServer.active)
                 return player == DewPlayer.local
-                    || (player.connectionToClient != null && Peers.ContainsKey(player.connectionToClient));
+                    || (player.connectionToClient != null && Peers.TryGetValue(player.connectionToClient, out var peer)
+                        && peer.Enabled);
             return player == DewPlayer.local && GuestCanSend();
+        }
+
+        internal static bool UsesExpandedScoreboardLayout(DewPlayer player)
+        {
+            if (player == null)
+                return false;
+            if (NetworkServer.active || player == DewPlayer.local)
+                return IsEnabledFor(player);
+
+            var settings = NetworkedManagerBase<GameSettingsManager>.softInstance;
+            if (ReadCapability(settings) == null)
+                return false;
+            return player.isHostPlayer || (settings.customData.TryGetValue(ScoreboardPeersKey, out var peers)
+                && ScoreboardPeers.Contains(peers, player.netId));
         }
 
         internal static void Poll()
@@ -74,6 +86,7 @@ namespace ChaosSlots
                 {
                     if (ReadCapability(settings) != _serverCapability)
                         settings.customData[CapabilityKey] = _serverCapability;
+                    PublishScoreboardPeers(settings);
                     _advertisedSettings = settings;
                 }
                 else
@@ -100,7 +113,7 @@ namespace ChaosSlots
             _helloCapability = capability;
             // Keep increasing across a module reload on the same live connection.
             _nextSequence = Math.Max(_nextSequence, (ulong)DateTime.UtcNow.Ticks);
-            NetworkClient.Send(new HelloV1(ProtocolVersion), Channels.Reliable);
+            NetworkClient.Send(new HelloV1(SlotMovePeer.EnabledVersion), Channels.Reliable);
         }
 
         internal static bool RequestMove(DewPlayer player, GemLocation origin, HeroSkillLocation target)
@@ -143,6 +156,7 @@ namespace ChaosSlots
             Peers.Clear();
             _serving = true;
             _advertisedSettings = null;
+            _publishedScoreboardPeers = null;
             _serverCapability = CapabilityPrefix + Guid.NewGuid().ToString("N");
             NetworkServer.ReplaceHandler<HelloV1>(OnHello, requireAuthentication: true);
             NetworkServer.ReplaceHandler<MoveV1>(OnMove, requireAuthentication: true);
@@ -150,8 +164,35 @@ namespace ChaosSlots
 
         private static void OnHello(NetworkConnectionToClient sender, HelloV1 message)
         {
-            if (_serving && message.Version == ProtocolVersion && !Peers.ContainsKey(sender))
-                Peers.Add(sender, new Peer());
+            if (!_serving)
+                return;
+            if (!Peers.TryGetValue(sender, out var peer))
+            {
+                if (message.Version != SlotMovePeer.EnabledVersion)
+                    return;
+                peer = new SlotMovePeer();
+                Peers.Add(sender, peer);
+            }
+            if (peer.UpdateVersion(message.Version))
+                _publishedScoreboardPeers = null;
+        }
+
+        private static void PublishScoreboardPeers(GameSettingsManager settings)
+        {
+            bool changed = _publishedScoreboardPeers == null;
+            foreach (var entry in Peers)
+            {
+                var identity = entry.Key.identity;
+                uint id = entry.Value.Enabled && identity != null ? identity.netId : 0u;
+                changed |= entry.Value.PublishedPlayerId != id;
+                entry.Value.PublishedPlayerId = id;
+            }
+            if (changed)
+                _publishedScoreboardPeers = ScoreboardPeers.Format(Peers.Values.Select(peer => peer.PublishedPlayerId));
+
+            // Use the game's synchronized settings so older clients can ignore this UI-only data.
+            if (!settings.customData.TryGetValue(ScoreboardPeersKey, out var current) || current != _publishedScoreboardPeers)
+                settings.customData[ScoreboardPeersKey] = _publishedScoreboardPeers;
         }
 
         private static void OnMove(NetworkConnectionToClient sender, MoveV1 message)
@@ -159,11 +200,9 @@ namespace ChaosSlots
             if (!_serving || !sender.isReady || !Peers.TryGetValue(sender, out var peer))
                 return;
 
-            ulong lastSequence = peer.LastSequence;
             var request = message.Request;
-            if (request.Sequence <= lastSequence)
+            if (!peer.TryAcceptSequence(request.Sequence, out ulong lastSequence))
                 return;
-            peer.LastSequence = request.Sequence;
             if (message.RoomNetId == 0u || message.RoomNetId != CurrentRoomNetId())
                 return;
 
@@ -172,6 +211,9 @@ namespace ChaosSlots
 
         internal static void ShutDown()
         {
+            // Older hosts ignore this Hello version. Both markers use the same reliable channel as moves.
+            if (!NetworkServer.active && GuestCanSend())
+                NetworkClient.Send(new HelloV1(SlotMovePeer.DisabledVersion), Channels.Reliable);
             ClearAdvertisement();
             // Leave disabled handlers to drain messages in flight. Mirror clears its handlers on server shutdown,
             // and disconnects a guest immediately if it receives a message for an unregistered message ID.
@@ -184,7 +226,10 @@ namespace ChaosSlots
         {
             if (NetworkServer.active && _advertisedSettings != null && _advertisedSettings.isServer
                 && ReadCapability(_advertisedSettings) == _serverCapability)
+            {
                 _advertisedSettings.customData.Remove(CapabilityKey);
+                _advertisedSettings.customData.Remove(ScoreboardPeersKey);
+            }
             _advertisedSettings = null;
         }
 
@@ -193,6 +238,7 @@ namespace ChaosSlots
             _serving = false;
             _advertisedSettings = null;
             _serverCapability = null;
+            _publishedScoreboardPeers = null;
             Peers.Clear();
         }
 
@@ -232,7 +278,11 @@ namespace ChaosSlots
         [HarmonyPatch(typeof(DewNetworkManager), nameof(DewNetworkManager.OnServerDisconnect))]
         private static class DisconnectPatch
         {
-            private static void Postfix(NetworkConnectionToClient conn) => Peers.Remove(conn);
+            private static void Postfix(NetworkConnectionToClient conn)
+            {
+                if (Peers.Remove(conn))
+                    _publishedScoreboardPeers = null;
+            }
         }
 
         [HarmonyPatch(typeof(DewPersistence), nameof(DewPersistence.SerializeGameObject))]
@@ -241,11 +291,12 @@ namespace ChaosSlots
             private static void Postfix(GameObject gobj, Dictionary<string, string> __result)
             {
                 if (!__result.ContainsKey(CustomDataSaveKey) || !gobj.TryGetComponent<GameSettingsManager>(out var settings)
-                    || !settings.customData.ContainsKey(CapabilityKey))
+                    || (!settings.customData.ContainsKey(CapabilityKey) && !settings.customData.ContainsKey(ScoreboardPeersKey)))
                     return;
 
                 var durableData = new Dictionary<string, string>(settings.customData);
                 durableData.Remove(CapabilityKey);
+                durableData.Remove(ScoreboardPeersKey);
                 __result[CustomDataSaveKey] = DewPersistence.ToJson(durableData);
             }
         }

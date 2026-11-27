@@ -25,6 +25,7 @@ using ShapeOfDreamsMods;
     (nameof(SlotMoveRequestTests.TheSourceGemMustStillMatch), SlotMoveRequestTests.TheSourceGemMustStillMatch),
     (nameof(SlotMoveRequestTests.ImmediateRetryCannotMoveASecondSlot), SlotMoveRequestTests.ImmediateRetryCannotMoveASecondSlot),
     (nameof(SlotMoveRequestTests.ARepeatedSequenceIsRejectedEvenWhenTheOldSnapshotMatches), SlotMoveRequestTests.ARepeatedSequenceIsRejectedEvenWhenTheOldSnapshotMatches),
+    (nameof(SlotMoveRequestTests.UnregisteringAPeerKeepsItsLastSequence), SlotMoveRequestTests.UnregisteringAPeerKeepsItsLastSequence),
     (nameof(BonusSlotArcTests.NoBonusHasNoUpperArc), BonusSlotArcTests.NoBonusHasNoUpperArc),
     (nameof(BonusSlotArcTests.FourSlotsMirrorTheStockArc), BonusSlotArcTests.FourSlotsMirrorTheStockArc),
     (nameof(BonusSlotArcTests.FewerSlotsUseASymmetricCentralSubarc), BonusSlotArcTests.FewerSlotsUseASymmetricCentralSubarc),
@@ -34,6 +35,13 @@ using ShapeOfDreamsMods;
     (nameof(BonusSlotArcTests.RoundClearanceDoesNotLiftClearOuterSlots), BonusSlotArcTests.RoundClearanceDoesNotLiftClearOuterSlots),
     (nameof(BonusSlotArcTests.RoundClearanceOnlyLiftsAsFarAsNeeded), BonusSlotArcTests.RoundClearanceOnlyLiftsAsFarAsNeeded),
     (nameof(BonusSlotArcTests.RoundClearanceUsesWidenedPositions), BonusSlotArcTests.RoundClearanceUsesWidenedPositions),
+    (nameof(ScoreboardSlotLayoutTests.FiveSlotMemoryKeepsItsBaseSlotsAndShowsBothBonuses), ScoreboardSlotLayoutTests.FiveSlotMemoryKeepsItsBaseSlotsAndShowsBothBonuses),
+    (nameof(ScoreboardSlotLayoutTests.EverySupportedCapacitySelectsItsOwnGroup), ScoreboardSlotLayoutTests.EverySupportedCapacitySelectsItsOwnGroup),
+    (nameof(ScoreboardSlotLayoutTests.ExpandedFrameFitsTheUpperArcAtEveryBonusCount), ScoreboardSlotLayoutTests.ExpandedFrameFitsTheUpperArcAtEveryBonusCount),
+    (nameof(ScoreboardSlotLayoutTests.UpperArcClearsTheChargeBadge), ScoreboardSlotLayoutTests.UpperArcClearsTheChargeBadge),
+    (nameof(ScoreboardSlotLayoutTests.UnmodifiedPlayerKeepsTheStockFourSlotGroup), ScoreboardSlotLayoutTests.UnmodifiedPlayerKeepsTheStockFourSlotGroup),
+    (nameof(ScoreboardSlotLayoutTests.RowHeightFollowsTheTallestMemory), ScoreboardSlotLayoutTests.RowHeightFollowsTheTallestMemory),
+    (nameof(ScoreboardSlotLayoutTests.OnlyRegisteredPeersUseTheExpandedFourSlotGroup), ScoreboardSlotLayoutTests.OnlyRegisteredPeersUseTheExpandedFourSlotGroup),
 ];
 
 var failures = 0;

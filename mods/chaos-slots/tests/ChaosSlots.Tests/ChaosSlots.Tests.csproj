@@ -10,6 +10,9 @@
     <EmbeddedResource Include="../../src/ChaosSlots/TooltipText.tsv" LogicalName="ShapeOfDreamsMods.TooltipText.tsv" />
     <Compile Include="../../src/ChaosSlots/SlotRules.cs" Link="SlotRules.cs" />
     <Compile Include="../../src/ChaosSlots/SlotMoveRequest.cs" Link="SlotMoveRequest.cs" />
+    <Compile Include="../../src/ChaosSlots/SlotMovePeer.cs" Link="SlotMovePeer.cs" />
     <Compile Include="../../src/ChaosSlots/BonusSlotArc.cs" Link="BonusSlotArc.cs" />
+    <Compile Include="../../src/ChaosSlots/ScoreboardSlotLayout.cs" Link="ScoreboardSlotLayout.cs" />
+    <Compile Include="../../src/ChaosSlots/ScoreboardPeers.cs" Link="ScoreboardPeers.cs" />
   </ItemGroup>
 </Project>

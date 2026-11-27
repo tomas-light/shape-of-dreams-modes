@@ -18,6 +18,8 @@ namespace ChaosSlots
             ChaosSlotHandle.CancelDrag();
             ChaosSlotNetwork.ShutDown();
             ChaosGemGroups.RestoreAll();
+            ChaosScoreboardSlots.RestoreAll();
+            ChaosScoreboardFrame.RestoreAll();
             ChaosResultFrame.RestoreAll();
             ChaosResultSlots.RestoreAll();
             ChaosPetal.Release();
