@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ShapeOfDreamsMods;
 using UnityEngine;
 
 namespace EffectBreakdown
@@ -176,7 +177,7 @@ namespace EffectBreakdown
         internal static void AddDifficulty(List<EffectModifier> modifiers, float multiplier)
         {
             if (IsModifier(multiplier))
-                modifiers.Add(new EffectModifier(DifficultyName(), multiplier));
+                modifiers.Add(new EffectModifier(TooltipText.Get(DescriptionPatch.TooltipCulture(), "Difficulty"), multiplier));
         }
 
         internal static void AddStatus(List<EffectModifier> modifiers, string typeName, float multiplier)
@@ -190,9 +191,5 @@ namespace EffectBreakdown
         private static bool IsModifier(float multiplier) =>
             multiplier >= 0f && !float.IsInfinity(multiplier) && Math.Abs(multiplier - 1f) > 0.000001f;
 
-        private static string DifficultyName() =>
-            DewSave.profileMain?.language?.StartsWith("ru", StringComparison.OrdinalIgnoreCase) == true
-                ? "Сложность"
-                : "Difficulty";
     }
 }

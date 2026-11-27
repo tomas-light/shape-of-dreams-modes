@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using HarmonyLib;
 
 namespace EffectBreakdown
@@ -9,6 +10,18 @@ namespace EffectBreakdown
     {
         [ThreadStatic]
         internal static bool IsRendering;
+        [ThreadStatic]
+        private static HeroSkillLocation? _loadoutSlot;
+        [ThreadStatic]
+        private static HeroSkillLocation? _previewSlot;
+        private static readonly ConditionalWeakTable<IReadOnlyList<object>, LoadoutTooltip> LoadoutTooltips =
+            new ConditionalWeakTable<IReadOnlyList<object>, LoadoutTooltip>();
+
+        private sealed class LoadoutTooltip
+        {
+            internal readonly HeroSkillLocation Slot;
+            internal LoadoutTooltip(HeroSkillLocation slot) => Slot = slot;
+        }
 
         private static IEnumerable<System.Reflection.MethodBase> TargetMethods()
         {
@@ -16,20 +29,75 @@ namespace EffectBreakdown
             yield return AccessTools.Method(typeof(UI_Tooltip_GemDescription), "DoLobbyDejavuTooltip");
         }
 
-        private static void Prefix(UI_Tooltip_BaseObj __instance, out bool __state)
+        private static void Prefix(UI_Tooltip_BaseObj __instance, out (bool Rendering, HeroSkillLocation? Slot) __state)
         {
-            __state = IsRendering;
-            IsRendering = IsDejavu(__instance);
+            __state = (IsRendering, _previewSlot);
+            _previewSlot = null;
+            var objects = __instance.currentObjects;
+            if (__instance is UI_Tooltip_SkillDescription && objects?.Count == 1 &&
+                __instance.currentObject is SkillTrigger)
+            {
+                // The tooltip section periodically rebuilds its text using the same object list.
+                if (_loadoutSlot.HasValue)
+                    LoadoutTooltips.GetValue(objects, _ => new LoadoutTooltip(_loadoutSlot.Value));
+                if (LoadoutTooltips.TryGetValue(objects, out var tooltip))
+                    _previewSlot = tooltip.Slot;
+            }
+            IsRendering = _previewSlot.HasValue || IsDejavu(__instance);
         }
 
-        private static Exception Finalizer(bool __state, Exception __exception)
+        private static Exception Finalizer((bool Rendering, HeroSkillLocation? Slot) __state, Exception __exception)
         {
-            IsRendering = __state;
+            (IsRendering, _previewSlot) = __state;
             return __exception;
         }
 
         internal static bool IsDejavu(UI_Tooltip_BaseObj tooltip) =>
-            tooltip.currentObjects.Count >= 2 && tooltip.currentObjects[1] is string id && id == "Dejavu";
+            tooltip.currentObjects?.Count >= 2 && tooltip.currentObjects[1] is string id && id == "Dejavu";
+
+        [HarmonyPatch(typeof(UI_TooltipManager), nameof(UI_TooltipManager.Hide))]
+        private static class ClearLoadoutTooltip
+        {
+            private static void Prefix(UI_TooltipManager __instance) => LoadoutTooltips.Remove(__instance.currentObjects);
+        }
+
+        [HarmonyPatch]
+        private static class LoadoutTooltipScope
+        {
+            private static IEnumerable<System.Reflection.MethodBase> TargetMethods()
+            {
+                yield return AccessTools.Method(typeof(UI_Lobby_Loadout_SkillSlot), "ShowTooltip");
+                yield return AccessTools.Method(typeof(UI_Lobby_Loadout_AvailableSkills_Item), "ShowTooltip");
+                yield return AccessTools.Method(typeof(UI_Lobby_Constellations_Skills_Slot), "ShowTooltip");
+                yield return AccessTools.Method(typeof(UI_Lobby_Constellations_Skills_ContextMenu_Item), "ShowTooltip");
+            }
+
+            private static void Prefix(UnityEngine.Component __instance, out HeroSkillLocation? __state)
+            {
+                __state = _loadoutSlot;
+                switch (__instance)
+                {
+                    case UI_Lobby_Loadout_SkillSlot slot:
+                        _loadoutSlot = slot.type;
+                        break;
+                    case UI_Lobby_Loadout_AvailableSkills_Item item:
+                        _loadoutSlot = item.GetComponentInParent<UI_Lobby_Loadout_AvailableSkills>()?.type;
+                        break;
+                    case UI_Lobby_Constellations_Skills_Slot constellationSlot:
+                        _loadoutSlot = constellationSlot.type;
+                        break;
+                    case UI_Lobby_Constellations_Skills_ContextMenu_Item item:
+                        _loadoutSlot = item.GetComponentInParent<UI_Lobby_Constellations_Skills_ContextMenu>()?.type;
+                        break;
+                }
+            }
+
+            private static Exception Finalizer(HeroSkillLocation? __state, Exception __exception)
+            {
+                _loadoutSlot = __state;
+                return __exception;
+            }
+        }
 
         internal static List<EffectModifier> Modifiers(EffectKind kind)
         {
@@ -115,7 +183,7 @@ namespace EffectBreakdown
 
             foreach (var (star, level, strength) in EquippedStars(player.selectedLoadout))
             {
-                if (!CooldownStarApplies(star, skill))
+                if (!CooldownStarApplies(star, skill, _previewSlot))
                     continue;
 
                 var (multiplier, offset) = CooldownStar(star, scaling => scaling.GetValue(level, strength), canReceiveReduction);
@@ -128,12 +196,12 @@ namespace EffectBreakdown
             return modifiers;
         }
 
-        internal static bool CooldownStarApplies(StarEffect star, SkillTrigger skill)
+        internal static bool CooldownStarApplies(StarEffect star, SkillTrigger skill, HeroSkillLocation? previewSlot = null)
         {
             if (!(star is Se_Star_Husk_D_MovementSkillHaste))
                 return star.IsSkillRelated(skill);
 
-            var location = skill.skillType;
+            var location = previewSlot ?? skill.skillType;
             return (location == HeroSkillLocation.Q || location == HeroSkillLocation.W ||
                     location == HeroSkillLocation.E || location == HeroSkillLocation.R) &&
                    (skill.configs[0].selfValidator.isMovementAbility || (skill.tags & DescriptionTags.Mobility) != 0);

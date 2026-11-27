@@ -1,7 +1,9 @@
 using ChaosSlots;
+using ShapeOfDreamsMods;
 
 (string Name, Action Run)[] tests =
 [
+    (nameof(RewardPromptsUseTheGameLanguage), RewardPromptsUseTheGameLanguage),
     (nameof(FreshRunCanGrantToAnyMemory), FreshRunCanGrantToAnyMemory),
     (nameof(FourthGrantCanGoToSameMemory), FourthGrantCanGoToSameMemory),
     (nameof(FullBudgetBlocksGrantsEvenToEmptyMemories), FullBudgetBlocksGrantsEvenToEmptyMemories),
@@ -51,6 +53,13 @@ foreach (var (name, run) in tests)
 
 Console.WriteLine($"{tests.Length - failures}/{tests.Length} tests passed.");
 return failures == 0 ? 0 : 1;
+
+static void RewardPromptsUseTheGameLanguage()
+{
+    var culture = TooltipText.GetCulture("ja-JP");
+    Equal("記憶を選択 · 混沌スロット：2/4", TooltipText.Format(culture, "ChooseMemoryWithSlotCount", 2, 4), "reward counter");
+    Equal("堕落した混沌のスロットが上限に達しました", TooltipText.Get(culture, "SlotLimit"), "slot limit");
+}
 
 static void FreshRunCanGrantToAnyMemory()
 {

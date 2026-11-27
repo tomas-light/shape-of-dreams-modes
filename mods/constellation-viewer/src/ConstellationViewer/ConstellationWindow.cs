@@ -1,4 +1,5 @@
 using System;
+using ShapeOfDreamsMods;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -30,7 +31,7 @@ namespace ConstellationViewer
 
         public UI_InGame_HeroDetailWindow Stats { get; private set; }
 
-        private static bool IsRussian => DewSave.profileMain?.language == "ru-RU";
+        private static string Localize(string key) => TooltipText.Get(TooltipText.GetCulture(DewSave.profileMain?.language), key);
 
         public void Initialize(UI_InGame_HeroDetailWindow stats, InGameUIManager ui, GlobalUIManager global)
         {
@@ -53,7 +54,10 @@ namespace ConstellationViewer
             _launcher.pivot = new Vector2(0f, 1f);
             _launcher.anchoredPosition = new Vector2(8f, 0f);
             _launcher.sizeDelta = new Vector2(154f, 36f);
-            var label = AddText(_launcher, IsRussian ? "Созвездия" : "Constellations", 18, TextAlignmentOptions.Center);
+            var label = AddText(_launcher, Localize("Launcher"), 18, TextAlignmentOptions.Center);
+            label.enableAutoSizing = true;
+            label.fontSizeMin = 14;
+            label.fontSizeMax = 18;
             Fill(label.rectTransform, 6f, 2f, 6f, 2f);
         }
 
@@ -161,7 +165,7 @@ namespace ConstellationViewer
             panel.sizeDelta = new Vector2(960, 614);
             AddImage(panel, PanelColor);
 
-            var title = AddText(panel, IsRussian ? "Выбранные созвездия" : "Equipped constellations", 34);
+            var title = AddText(panel, Localize("Equipped"), 34);
             TopLeft(title.rectTransform, 30, 18, 760, 56);
             title.color = Accent;
 
@@ -214,10 +218,9 @@ namespace ConstellationViewer
             }
 
             if (starCount == 0)
-                AddText(listScroll.content, IsRussian ? "Нет выбранных созвездий" : "No constellations equipped", 22);
+                AddText(listScroll.content, Localize("Empty"), 22);
             else
-                _description.text = IsRussian ? "Наведите курсор на созвездие, чтобы прочитать описание." :
-                    "Hover over a constellation to read its description.";
+                _description.text = Localize("HoverHint");
         }
 
         private void AddStarRow(RectTransform list, StarType category, LoadoutStarItem entry, StarEffect star, float strength)
@@ -262,7 +265,7 @@ namespace ConstellationViewer
             hover.Description = star != null
                 ? DewLocalization.ConvertDescriptionNodesToText(DewLocalization.GetStarDescription(entry.name),
                     new DewLocalization.DescriptionSettings { currentLevel = level, starStrength = strength })
-                : (IsRussian ? "Описание недоступно." : "Description unavailable.");
+                : Localize("Unavailable");
         }
 
         internal void ShowDetails(ConstellationRow row)

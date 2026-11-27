@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using DewInternal;
 using HarmonyLib;
+using ShapeOfDreamsMods;
 
 namespace EffectBreakdown
 {
@@ -72,13 +75,12 @@ namespace EffectBreakdown
 
             var skill = settings.contextObject as SkillTrigger;
             var culture = _layout.Culture;
-            bool russian = culture.TwoLetterISOLanguageName == "ru";
-            string label = EffectLabel(expression, kind, russian);
-            string form = EffectExpressions.FormLabel(expression, russian);
+            string label = EffectLabel(expression, kind, culture);
+            string form = EffectExpressions.FormLabel(expression, culture);
             if (kind == EffectKind.CooldownRatio || kind == EffectKind.CooldownMultiplier ||
                 kind == EffectKind.GemCooldownSeconds)
             {
-                AddUnchangedRow(label + form, original, russian);
+                AddUnchangedRow(label + form, original, culture);
                 return original;
             }
 
@@ -91,7 +93,7 @@ namespace EffectBreakdown
             AddEffectRow(label + form, original, expression, settings, showDetails, modifiers, culture);
 
             if (shared && modifiers.Count != 0 && AppliesReductionToEssences(hero, skill))
-                AddUnchangedRow(russian ? "Сокращение перезарядки эссенций" : "Essence cooldown reduction", original, russian);
+                AddUnchangedRow(TooltipText.Get(culture, "EssenceReduction"), original, culture);
 
             if (kind == EffectKind.Damage)
             {
@@ -101,55 +103,51 @@ namespace EffectBreakdown
                 else
                     EffectModifiers.AddBossDamageModifiers(hero, boss);
                 if (boss.Count > modifiers.Count)
-                    AddEffectRow(label + (russian ? " по боссу" : " against a boss") + form, original, expression,
+                    AddEffectRow(TooltipText.Format(culture, "AgainstBoss", label) + form, original, expression,
                         settings, showDetails, boss, culture);
             }
 
             return original;
         }
 
-        private static string EffectLabel(ExpressionData expression, EffectKind kind, bool russian)
+        private static readonly string[] DamageElements = { "Dark", "Light", "Cold", "Fire" };
+
+        private static string EffectLabel(ExpressionData expression, EffectKind kind, CultureInfo culture)
         {
-            string following = TextAfter(expression);
             switch (kind)
             {
                 case EffectKind.Damage:
-                    if (russian)
-                    {
-                        if (following.Contains("тьм")) return "Урон тьмы";
-                        if (following.Contains("свет")) return "Урон света";
-                        if (following.Contains("холод")) return "Урон холода";
-                        if (following.Contains("огн")) return "Урон огня";
-                    }
-                    else
-                    {
-                        if (following.Contains("dark")) return "Dark damage";
-                        if (following.Contains("light")) return "Light damage";
-                        if (following.Contains("cold")) return "Cold damage";
-                        if (following.Contains("fire")) return "Fire damage";
-                    }
-                    return russian ? "Урон" : "Damage";
+                    var (before, after) = AdjacentText(expression);
+                    foreach (string element in DamageElements)
+                        if (TooltipText.Matches(culture, element + "Token", after))
+                            return TooltipText.Get(culture, element + "Damage");
+                    foreach (string element in DamageElements)
+                        if (TooltipText.Matches(culture, element + "Token", before))
+                            return TooltipText.Get(culture, element + "Damage");
+                    return TooltipText.Get(culture, "Damage");
                 case EffectKind.Heal:
-                    if (following.Contains(russian ? "от нанес" : "damage dealt"))
-                        return russian ? "Самоисцеление от нанесённого урона" : "Self-healing from damage dealt";
-                    return russian ? "Исцеление на себя" : "Self-healing";
+                    var (healBefore, healAfter) = AdjacentText(expression);
+                    return TooltipText.Get(culture, TooltipText.Matches(culture, "DamageDealtToken", healAfter) ||
+                        TooltipText.Matches(culture, "DamageDealtToken", healBefore) ? "HealFromDamage" : "SelfHeal");
                 case EffectKind.Barrier:
-                    return russian ? "Щит на себя" : "Barrier on self";
+                    return TooltipText.Get(culture, "SelfBarrier");
                 case EffectKind.CooldownMultiplier:
-                    return russian ? "Множитель перезарядки навыка" : "Ability cooldown multiplier";
+                    return TooltipText.Get(culture, "CooldownMultiplier");
                 case EffectKind.GemCooldownSeconds:
-                    return russian ? "Сокращение перезарядки эссенций" : "Essence cooldown reduction";
+                    return TooltipText.Get(culture, "EssenceReduction");
                 case EffectKind.SharedCooldownSeconds:
-                    return russian ? "Сокращение перезарядки воспоминаний" : "Memory cooldown reduction";
+                    return TooltipText.Get(culture, "MemoryReduction");
                 default:
-                    return (russian ? "Сокращение перезарядки " : "Cooldown reduction ") +
-                        EffectExpressions.TriggerLabel(expression, russian);
+                    return EffectExpressions.CooldownReductionLabel(expression, culture);
             }
         }
 
-        private static string TextAfter(ExpressionData expression)
+        private static readonly char[] SentenceEnds = { '.', '!', '?', '\n', '。', '！', '？' };
+
+        private static (string Before, string After) AdjacentText(ExpressionData expression)
         {
-            var text = new System.Text.StringBuilder();
+            var before = new StringBuilder();
+            var after = new StringBuilder();
             bool found = false;
             foreach (var node in _layout.Nodes)
             {
@@ -158,17 +156,30 @@ namespace EffectBreakdown
                     if (found)
                         break;
                     found = ReferenceEquals(node.expressionData, expression);
+                    if (!found)
+                        before.Clear();
                 }
-                else if (found && node.type == LocaleNodeType.Text)
+                else if (node.type == LocaleNodeType.Text)
                 {
                     string part = node.textData ?? "";
-                    int stop = part.IndexOfAny(new[] { '.', '!', '?', '\n' });
-                    text.Append(stop == -1 ? part : part.Substring(0, stop));
-                    if (stop != -1 || text.Length >= 90)
-                        break;
+                    if (found)
+                    {
+                        int stop = part.IndexOfAny(SentenceEnds);
+                        after.Append(stop == -1 ? part : part.Substring(0, stop));
+                        if (stop != -1 || after.Length >= 90)
+                            break;
+                    }
+                    else
+                    {
+                        int previousStop = part.LastIndexOfAny(SentenceEnds);
+                        if (previousStop != -1)
+                            before.Clear();
+                        before.Append(part.Substring(previousStop + 1));
+                    }
                 }
             }
-            return text.ToString().ToLowerInvariant();
+            return found ? (before.ToString(Math.Max(0, before.Length - 90), Math.Min(90, before.Length)), after.ToString())
+                : ("", "");
         }
 
         private static bool AppliesReductionToEssences(Hero hero, SkillTrigger skill)
@@ -184,12 +195,12 @@ namespace EffectBreakdown
             return false;
         }
 
-        private static void AddUnchangedRow(string label, string value, bool russian)
+        private static void AddUnchangedRow(string label, string value, CultureInfo culture)
         {
             if (EffectModifiers.GetJellyfish(LobbyPreview.IsRendering) == null)
                 return;
             string name = DewLocalization.GetUIValue(nameof(LucidDream_PrudentJellyfish) + "_Name");
-            string source = name + (russian ? " · не влияет" : " · no effect");
+            string source = name + " · " + TooltipText.Get(culture, "NoEffect");
             _layout.Rows.Add(new TooltipRow(label, value, value, new[] { source }, false));
         }
 
@@ -227,21 +238,6 @@ namespace EffectBreakdown
             return new ExpressionData { raw = expression.raw, format = format, nodes = nodes };
         }
 
-        internal static CultureInfo TooltipCulture()
-        {
-            string language = DewSave.profileMain?.language;
-            if (!string.IsNullOrEmpty(language))
-            {
-                try
-                {
-                    return CultureInfo.GetCultureInfo(language);
-                }
-                catch (CultureNotFoundException)
-                {
-                    // The game may use a language identifier unknown to Mono.
-                }
-            }
-            return CultureInfo.CurrentCulture;
-        }
+        internal static CultureInfo TooltipCulture() => TooltipText.GetCulture(DewSave.profileMain?.language);
     }
 }

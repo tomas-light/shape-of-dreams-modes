@@ -10,6 +10,8 @@
     <Compile Include="../../src/EffectBreakdown/EffectExpressions.cs" Link="EffectExpressions.cs" />
     <Compile Include="../../src/EffectBreakdown/EffectDiscovery.cs" Link="EffectDiscovery.cs" />
     <Compile Include="../../src/EffectBreakdown/TooltipBreakdown.cs" Link="TooltipBreakdown.cs" />
+    <Compile Include="../../../shared/TooltipText.cs" Link="TooltipText.cs" />
+    <EmbeddedResource Include="../../src/EffectBreakdown/TooltipText.tsv" LogicalName="ShapeOfDreamsMods.TooltipText.tsv" />
     <Reference Include="Dew.Core" HintPath="$(GameManagedDir)\Dew.Core.dll" />
     <Reference Include="Mono.CecilX" HintPath="$(GameManagedDir)\Mono.CecilX.dll" />
     <None Include="$(GameManagedDir)\Dew.Contents.dll" Link="Dew.Contents.dll" CopyToOutputDirectory="PreserveNewest" />

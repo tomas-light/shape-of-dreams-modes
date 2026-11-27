@@ -1,5 +1,6 @@
 using System;
 using HarmonyLib;
+using ShapeOfDreamsMods;
 
 namespace ChaosSlots
 {
@@ -75,9 +76,8 @@ namespace ChaosSlots
                     return;
 
                 int total = ChaosSlotState.Read(ChaosSlotState.FindBonus(player.hero)).Total;
-                __result = IsRussian
-                    ? $"Выберите воспоминание · Ячейки Хаоса: {total}/{SlotRules.BonusLimit}"
-                    : $"Choose a memory · Chaos slots: {total}/{SlotRules.BonusLimit}";
+                var culture = TooltipText.GetCulture(DewSave.profileMain?.language);
+                __result = TooltipText.Format(culture, "ChooseMemoryWithSlotCount", total, SlotRules.BonusLimit);
             }
         }
 
@@ -93,13 +93,8 @@ namespace ChaosSlots
 
         private static string GetRejectionText(HeroSkillLocation location)
         {
-            if (!ChaosSlotState.TryMemorySlot(location, out _))
-                return IsRussian ? "Выберите одно из четырёх обычных воспоминаний" : "Choose a Q/W/E/R memory";
-
-            return IsRussian ? "Лимит ячеек Искажённого Хаоса исчерпан" : "Corrupted Chaos slot limit reached";
+            var culture = TooltipText.GetCulture(DewSave.profileMain?.language);
+            return TooltipText.Get(culture, ChaosSlotState.TryMemorySlot(location, out _) ? "SlotLimit" : "ChooseOrdinaryMemory");
         }
-
-        private static bool IsRussian =>
-            DewSave.profileMain?.language?.StartsWith("ru", StringComparison.OrdinalIgnoreCase) == true;
     }
 }

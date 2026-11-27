@@ -1,7 +1,9 @@
 using ConstellationViewer;
+using ShapeOfDreamsMods;
 
 (string Name, Action Run)[] tests =
 [
+    (nameof(WindowUsesTheGameLanguage), WindowUsesTheGameLanguage),
     (nameof(ShowsAllCategoriesInSlotOrder), ShowsAllCategoriesInSlotOrder),
     (nameof(SkipsEmptySlotsAndMissingCategories), SkipsEmptySlotsAndMissingCategories),
     (nameof(SkipsUnequippedLevelZeroStars), SkipsUnequippedLevelZeroStars),
@@ -30,6 +32,13 @@ foreach (var (name, run) in tests)
 
 Console.WriteLine($"{tests.Length - failures}/{tests.Length} tests passed.");
 return failures == 0 ? 0 : 1;
+
+static void WindowUsesTheGameLanguage()
+{
+    Equal("装備中の星座", TooltipText.Get(TooltipText.GetCulture("ja-JP"), "Equipped"), "Japanese window title");
+    Equal("已裝備的星座", TooltipText.Get(TooltipText.GetCulture("zh-TW"), "Equipped"), "Traditional Chinese window title");
+    Equal("Nenhuma constelação equipada", TooltipText.Get(TooltipText.GetCulture("pt-BR"), "Empty"), "Portuguese empty state");
+}
 
 static void ShowsAllCategoriesInSlotOrder()
 {

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using DewInternal;
+using ShapeOfDreamsMods;
 
 namespace EffectBreakdown
 {
@@ -25,28 +27,41 @@ namespace EffectBreakdown
 
         internal EffectExpressions(IReadOnlyDictionary<string, EffectKind> kinds) => _kinds = kinds;
 
-        internal static string FormLabel(ExpressionData expression, bool russian)
+        internal static string FormLabel(ExpressionData expression, CultureInfo culture)
         {
             foreach (var node in expression.nodes)
             {
                 if (node.type != ExpressionChildNodeType.FieldName)
                     continue;
                 if (node.value.StartsWith("Ai_Q_Laceration_Dash::", StringComparison.Ordinal))
-                    return russian ? " · красная форма" : " · red form";
+                    return " · " + TooltipText.Get(culture, "RedForm");
                 if (node.value.StartsWith("Ai_Q_Laceration_Circle::", StringComparison.Ordinal))
-                    return russian ? " · синяя форма" : " · blue form";
+                    return " · " + TooltipText.Get(culture, "BlueForm");
             }
             return "";
         }
 
-        internal static string TriggerLabel(ExpressionData expression, bool russian)
+        internal static string CooldownReductionLabel(ExpressionData expression, CultureInfo culture)
         {
+            foreach (var node in expression.nodes)
+            {
+                if (node.type != ExpressionChildNodeType.FieldName)
+                    continue;
+                switch (node.value)
+                {
+                    case "Ai_Q_Laceration_Circle::cooldownReductionPerHit":
+                        return TooltipText.Get(culture, "ReductionPerEnemy");
+                    case "Ai_Q_Laceration_Circle::cooldownReductionMax":
+                        return TooltipText.Get(culture, "MaxReduction");
+                }
+            }
+
             string raw = expression.raw ?? "";
             if (raw.IndexOf("empower", StringComparison.OrdinalIgnoreCase) >= 0)
-                return russian ? "при усилении" : "on empowered cast";
+                return TooltipText.Get(culture, "ReductionEmpowered");
             if (raw.IndexOf("onCrit", StringComparison.OrdinalIgnoreCase) >= 0)
-                return russian ? "при критическом ударе" : "on critical hit";
-            return russian ? "при срабатывании" : "on trigger";
+                return TooltipText.Get(culture, "ReductionOnCrit");
+            return TooltipText.Get(culture, "ReductionOnTrigger");
         }
 
         internal EffectKind Classify(ExpressionData expression)

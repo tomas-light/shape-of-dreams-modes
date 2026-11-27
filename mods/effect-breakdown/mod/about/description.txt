@@ -1,8 +1,22 @@
 [h1]Русский[/h1]
-Effect Breakdown добавляет расчёт исцеления, барьеров, урона и перезарядки в подсказки поддерживаемых воспоминаний и эссенций в забеге и в «Дежавю». Мод перечисляет источники поправок и выделяет красным ухудшение результата. Исцеление и барьеры рассчитаны для владельца, а условный урон помечен по типу цели.
+Effect Breakdown добавляет расчёт исцеления, барьеров, урона и перезарядки в подсказки воспоминаний и эссенций в забеге и в «Дежавю», а также при выборе воспоминаний путешественника в лобби. Мод перечисляет источники поправок и выделяет красным ухудшение результата. Исцеление и барьеры рассчитаны для владельца, а условный урон помечен по типу цели.
+
+Расчёт автоматически отображается на языке игры. Поддерживаются все 13 языков.
 
 [h1]English[/h1]
-Effect Breakdown adds healing, barrier, damage, and cooldown estimates to supported Memory and Essence tooltips during a run and in Déjà Vu. It names the modifiers and highlights penalties in red. Healing and barrier estimates apply to the owner, and conditional damage lists its target type.
+Effect Breakdown adds healing, barrier, damage, and cooldown estimates to Memory and Essence tooltips during a run, in Déjà Vu, and when choosing Traveler Memories in the lobby. It names the modifiers and highlights penalties in red. Healing and barrier estimates apply to the owner, and conditional damage lists its target type.
+
+The breakdown automatically uses the game’s language. All 13 languages are supported.
 
 [h1]Демонстрация / Gameplay[/h1]
-Луч Света / Beam of Light: 73 HP/s × 1.18 × 0.50 = 43.1 HP/s.
+Подсказки в лобби и «Дежавю». / Tooltips in the lobby and Déjà Vu.
+[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/main/mods/effect-breakdown/images/lobby-tooltips.gif[/img]
+
+[b]«Рассечение» / Laceration[/b] — перезарядка 7,5 → 5,25 с и расчёт для обеих форм. / Cooldown 7.5 → 5.25 s and separate rows for both forms.
+[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/main/mods/effect-breakdown/images/laceration-lobby.png[/img]
+
+[b]«Луч света» / Beam of Light[/b] — исцеление на себя 73% → 24% силы умений. / Self-healing 73% → 24% of Ability Power.
+[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/main/mods/effect-breakdown/images/beam-of-light.png[/img]
+
+[b]«Эссенция потока» / Essence of Flow[/b] — «Осторожная медуза» не влияет на процентное сокращение перезарядки. / Prudent Jellyfish leaves percentage-based cooldown reduction unchanged.
+[img]https://raw.githubusercontent.com/tomas-light/shape-of-dreams-modes/main/mods/effect-breakdown/images/essence-of-flow.png[/img]

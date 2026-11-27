@@ -2,6 +2,6 @@
   "id": "com.pikac.effectbreakdown",
   "name": "Effect Breakdown",
   "author": "pikac",
-  "modVer": "0.5.2",
+  "modVer": "1.0.0",
   "assemblies": ["lib/EffectBreakdown.dll"]
 }

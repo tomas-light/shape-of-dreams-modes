@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="../../../shared/TooltipText.cs" Link="TooltipText.cs" />
+    <EmbeddedResource Include="../../src/ChaosSlots/TooltipText.tsv" LogicalName="ShapeOfDreamsMods.TooltipText.tsv" />
     <Compile Include="../../src/ChaosSlots/SlotRules.cs" Link="SlotRules.cs" />
     <Compile Include="../../src/ChaosSlots/SlotMoveRequest.cs" Link="SlotMoveRequest.cs" />
     <Compile Include="../../src/ChaosSlots/BonusSlotArc.cs" Link="BonusSlotArc.cs" />

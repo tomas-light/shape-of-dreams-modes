@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using ShapeOfDreamsMods;
 
 namespace EffectBreakdown
 {
@@ -11,8 +12,7 @@ namespace EffectBreakdown
             if (skill == null)
                 return;
 
-            bool russian = culture.TwoLetterISOLanguageName == "ru";
-            string label = russian ? "Перезарядка навыка" : "Ability cooldown";
+            string label = TooltipText.Get(culture, "AbilityCooldown");
             if (LobbyPreview.IsRendering)
             {
                 AddLobbyRow(rows, skill, culture, label);
@@ -32,10 +32,10 @@ namespace EffectBreakdown
                 if (previousLevel.HasValue && previousLevel != currentLevel)
                 {
                     var previous = RenderLive(skill, 0, skill.GetCooldownTimeOnLevel(previousLevel.Value), culture, true,
-                        label + (russian ? " · уровень " : " · level ") + previousLevel.Value);
+                        label + " · " + TooltipText.Format(culture, "Level", previousLevel.Value));
                     if (previous.HasValue)
                         rows.Add(previous.Value);
-                    label += (russian ? " · уровень " : " · level ") + currentLevel.Value;
+                    label += " · " + TooltipText.Format(culture, "Level", currentLevel.Value);
                 }
 
                 var selected = RenderLive(skill, 0, skill.GetCooldownTimeOnLevel(currentLevel.Value), culture, true, label);
@@ -51,7 +51,7 @@ namespace EffectBreakdown
         }
 
         private static TooltipRow? RenderLive(SkillTrigger skill, int config, float current,
-            System.Globalization.CultureInfo culture, bool fromLevel, string label)
+            CultureInfo culture, bool fromLevel, string label)
         {
             var trigger = skill.configs[config];
             float baseTime = trigger.cooldownTime;
@@ -66,13 +66,11 @@ namespace EffectBreakdown
             float derived = skill.GetCooldownTimeMultiplier(config) / Math.Max(0.000001f, haste);
             float offset = skill.GetCooldownTimeOffset(config);
 
-            bool russian = culture.TwoLetterISOLanguageName == "ru";
-            string seconds = russian ? "с" : "s";
             var parts = new List<string>(3);
             if (canReceiveReduction && (Math.Abs(haste - 1f) > 0.000001f || Math.Abs(hastePoints) > 0.000001f))
                 CooldownSources.AddHasteEntries(skill.owner, hastePoints, parts, culture);
 
-            var named = CooldownSources.AddEntries(skill, canReceiveReduction, parts, culture, seconds);
+            var named = CooldownSources.AddEntries(skill, canReceiveReduction, parts, culture);
             if (fromLevel && !canReceiveReduction)
                 return null;
             if (fromLevel && baseTime + offset > 0.000001f)
@@ -81,10 +79,10 @@ namespace EffectBreakdown
             offset -= named.Offset;
             if (Math.Abs(derived - 1f) > 0.000001f)
                 parts.Add(TooltipBreakdown.FormatModifier(new EffectModifier(
-                    russian ? "Прочие множители" : "Other multipliers", derived), culture));
+                    TooltipText.Get(culture, "OtherMultipliers"), derived), culture));
             if (Math.Abs(offset) > 0.000001f)
-                parts.Add((russian ? "Поправка навыка " : "Skill offset ") +
-                    TooltipBreakdown.FormatSigned(offset, culture) + " " + seconds);
+                parts.Add(TooltipText.Get(culture, "SkillOffset") + " " +
+                    TooltipText.Format(culture, "Seconds", TooltipBreakdown.FormatSigned(offset, culture)));
 
             if (parts.Count == 0)
                 return null;
@@ -103,13 +101,12 @@ namespace EffectBreakdown
             if (modifiers.Count == 0 && offsets.Count == 0)
                 return;
 
-            string seconds = culture.TwoLetterISOLanguageName == "ru" ? "с" : "s";
             float multiplier = TooltipBreakdown.Combine(modifiers);
             float totalOffset = 0f;
             var parts = new List<string>();
             foreach (var (name, amount) in offsets)
             {
-                parts.Add(name + " " + TooltipBreakdown.FormatSigned(amount, culture) + " " + seconds);
+                parts.Add(name + " " + TooltipText.Format(culture, "Seconds", TooltipBreakdown.FormatSigned(amount, culture)));
                 totalOffset += amount;
             }
             foreach (var modifier in modifiers)
@@ -121,9 +118,8 @@ namespace EffectBreakdown
 
         private static TooltipRow CooldownRow(string label, float baseline, float current, List<string> parts, CultureInfo culture)
         {
-            string seconds = culture.TwoLetterISOLanguageName == "ru" ? " с" : " s";
-            return new TooltipRow(label, baseline.ToString("0.##", culture) + seconds, current.ToString("0.##", culture) + seconds,
-                parts, current > baseline + 0.000001f);
+            return new TooltipRow(label, TooltipText.Format(culture, "Seconds", baseline.ToString("0.##", culture)),
+                TooltipText.Format(culture, "Seconds", current.ToString("0.##", culture)), parts, current > baseline + 0.000001f);
         }
     }
 }

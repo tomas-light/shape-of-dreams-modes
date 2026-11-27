@@ -5,10 +5,25 @@ using System.IO;
 using System.Linq;
 using DewInternal;
 using EffectBreakdown;
+using ShapeOfDreamsMods;
 
 int checks = 0;
 var russian = CultureInfo.GetCultureInfo("ru-RU");
 var english = CultureInfo.GetCultureInfo("en-US");
+var french = TooltipText.GetCulture("fr-FR");
+var japanese = TooltipText.GetCulture("ja-JP");
+Check(TooltipBreakdown.FormatModifier(new EffectModifier("Brise", 1f / 1.15f, 15f), french) ==
+    "Brise : +15 d’accélération → −13,04% au temps de recharge", "Haste points and cooldown reduction are formatted in French.");
+Check(TooltipText.Get(japanese, "Heading") == "補正込みの計算" && TooltipText.Format(japanese, "Seconds", "4.21") == "4.21秒",
+    "Japanese tooltip text and seconds must use the Japanese catalog.");
+Check(TooltipText.Get(TooltipText.GetCulture("zh-HK"), "AbilityCooldown") == "技能冷卻時間" &&
+    TooltipText.Get(TooltipText.GetCulture("zh-CN"), "AbilityCooldown") == "技能冷却时间" &&
+    TooltipText.Get(TooltipText.GetCulture(null), "Heading") == "Modifier breakdown",
+    "Chinese script variants and the default language must resolve independently.");
+Check(TooltipText.Matches(french, "DarkToken", "Dégâts de Ténèbres") &&
+    TooltipText.Matches(japanese, "DamageDealtToken", "ダメージ量の") &&
+    TooltipText.Matches(TooltipText.GetCulture("tr-TR"), "LightToken", "Işık Hasarı"),
+    "Element and damage-based healing keywords must follow the language of the game description.");
 var wounds = new[]
 {
     new EffectModifier("Регенерация кожи", 1.18f),
@@ -77,12 +92,29 @@ Check(cooldowns.Contains("Перезарядка навыка</b>  4,5 с → 4,
 Check(cooldowns.Contains("Урон тьмы по боссу</b>  245% → 284,2%"), "A boss condition belongs in the row label.");
 Check(cooldowns.Contains("Сокращение перезарядки при усилении</b>  50% → 50%") &&
     cooldowns.Contains("Осторожная медуза · не влияет"), "An unchanged proc reduction must have its own row and source.");
-Check(EffectExpressions.FormLabel(Expression("Ai_Q_Laceration_Dash::dmgFactor"), true) == " · красная форма" &&
-    EffectExpressions.FormLabel(Expression("Ai_Q_Laceration_Circle::slashDamage"), true) == " · синяя форма",
+Check(EffectExpressions.FormLabel(Expression("Ai_Q_Laceration_Dash::dmgFactor"), russian) == " · красная форма" &&
+    EffectExpressions.FormLabel(Expression("Ai_Q_Laceration_Circle::slashDamage"), russian) == " · синяя форма" &&
+    EffectExpressions.FormLabel(Expression("Ai_Q_Laceration_Circle::slashDamage"), japanese) == " · 青型",
     "Laceration's damage lines must keep their form names.");
-Check(EffectExpressions.TriggerLabel(new ExpressionData { raw = "cooldownReductionOnCrit" }, true) == "при критическом ударе" &&
-    EffectExpressions.TriggerLabel(new ExpressionData { raw = "empoweredCooldownReductionRatio" }, false) == "on empowered cast",
+var onCrit = Expression("Gem_E_Fangs::cooldownReductionOnCrit");
+onCrit.raw = "cooldownReductionOnCrit";
+var onEmpoweredCast = Expression("Ai_C_DarkBolt::empoweredCooldownReductionRatio");
+onEmpoweredCast.raw = "empoweredCooldownReductionRatio";
+Check(EffectExpressions.CooldownReductionLabel(onCrit, russian) == "Сокращение перезарядки при критическом ударе" &&
+    EffectExpressions.CooldownReductionLabel(onEmpoweredCast, english) == "Cooldown reduction on empowered cast",
     "Critical hits and empowered casts must have distinct trigger labels.");
+var perHit = Expression("Ai_Q_Laceration_Circle::cooldownReductionPerHit");
+var maximum = Expression("Ai_Q_Laceration_Circle::cooldownReductionMax");
+var jellyfish = new[] { "Осторожная медуза · не влияет" };
+string blueForm = Render(russian,
+    new TooltipRow(EffectExpressions.CooldownReductionLabel(perHit, russian) + EffectExpressions.FormLabel(perHit, russian),
+        "15%", "15%", jellyfish, false),
+    new TooltipRow(EffectExpressions.CooldownReductionLabel(maximum, russian) + EffectExpressions.FormLabel(maximum, russian),
+        "60%", "60%", jellyfish, false));
+Check(expressions.Classify(perHit) == EffectKind.CooldownRatio && expressions.Classify(maximum) == EffectKind.CooldownRatio &&
+    blueForm.Contains("Сокращение за каждого поражённого врага · синяя форма</b>  15% → 15%") &&
+    blueForm.Contains("Максимальное сокращение · синяя форма</b>  60% → 60%") && !blueForm.Contains("· эффект "),
+    "Laceration's per-hit reduction and cap must have distinct labels and keep their values.");
 Check(Render(english, new TooltipRow("Ability cooldown", "8 s", "10 s", new[] { "Penalty +25%" }, true))
     .Contains("→ <color=#ff6565>10 s</color>"), "A longer cooldown must be red.");
 Check(Render(english, new TooltipRow("Cooldown reduction on trigger", "4 s", "2,8 s", new[] { "Penalty −30%" }, true))

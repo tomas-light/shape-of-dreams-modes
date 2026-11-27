@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
+using ShapeOfDreamsMods;
 
 namespace EffectBreakdown
 {
@@ -118,22 +119,19 @@ namespace EffectBreakdown
                 stars.Add((DewLocalization.GetStarName(star.GetType()), points));
             }
 
-            bool russian = culture.TwoLetterISOLanguageName == "ru";
-            string otherName = stars.Count == 0
-                ? (russian ? "Ускорение навыков" : "Ability haste")
-                : (russian ? "Прочее ускорение" : "Other haste");
+            string otherName = TooltipText.Get(culture, stars.Count == 0 ? "AbilityHaste" : "OtherHaste");
             foreach (var modifier in TooltipBreakdown.HasteModifiers(stars,
                 AbilityTrigger.GetCooldownTimeMultiplierByAbilityHaste, total - accounted, otherName))
                 parts.Add(TooltipBreakdown.FormatModifier(modifier, culture));
         }
 
         internal static (float Multiplier, float Offset) AddEntries(SkillTrigger skill, bool canReceiveReduction,
-            List<string> parts, CultureInfo culture, string seconds)
+            List<string> parts, CultureInfo culture)
         {
             float multiplier = 1f;
             float offset = 0f;
             if (!_bonuses.TryGetValue(skill, out var list))
-                return skill.isServer ? (multiplier, offset) : AddReplicatedEntries(skill, canReceiveReduction, parts, culture, seconds);
+                return skill.isServer ? (multiplier, offset) : AddReplicatedEntries(skill, canReceiveReduction, parts, culture);
 
             list.RemoveAll(bonus => bonus == null || bonus.parent != skill);
             foreach (var bonus in list)
@@ -150,7 +148,7 @@ namespace EffectBreakdown
                 }
                 if (Math.Abs(bonus.cooldownOffset) > 0.000001f)
                 {
-                    parts.Add(name + " " + TooltipBreakdown.FormatSigned(bonus.cooldownOffset, culture) + " " + seconds);
+                    parts.Add(name + " " + TooltipText.Format(culture, "Seconds", TooltipBreakdown.FormatSigned(bonus.cooldownOffset, culture)));
                     offset += bonus.cooldownOffset;
                 }
             }
@@ -158,7 +156,7 @@ namespace EffectBreakdown
         }
 
         private static (float Multiplier, float Offset) AddReplicatedEntries(SkillTrigger skill, bool canReceiveReduction,
-            List<string> parts, CultureInfo culture, string seconds)
+            List<string> parts, CultureInfo culture)
         {
             float multiplier = 1f;
             float offset = 0f;
@@ -177,7 +175,7 @@ namespace EffectBreakdown
                 }
                 if (Math.Abs(adjustment) > 0.000001f)
                 {
-                    parts.Add(name + " " + TooltipBreakdown.FormatSigned(adjustment, culture) + " " + seconds);
+                    parts.Add(name + " " + TooltipText.Format(culture, "Seconds", TooltipBreakdown.FormatSigned(adjustment, culture)));
                     offset += adjustment;
                 }
             }

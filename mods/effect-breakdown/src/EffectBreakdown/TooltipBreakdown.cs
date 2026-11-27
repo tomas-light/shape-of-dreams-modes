@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
+using ShapeOfDreamsMods;
 
 namespace EffectBreakdown
 {
@@ -76,9 +77,7 @@ namespace EffectBreakdown
                 return $"{name} {percent}";
 
             string points = FormatSigned(modifier.Haste.Value, culture);
-            return culture.TwoLetterISOLanguageName == "ru"
-                ? $"{name}: {points} к ускорению → {percent} ко времени перезарядки"
-                : $"{name}: {points} haste → {percent} cooldown time";
+            return TooltipText.Format(culture, "HasteSource", name, points, percent);
         }
 
         internal static string FormatSigned(float amount, CultureInfo culture) =>
@@ -90,9 +89,7 @@ namespace EffectBreakdown
                 return description;
 
             var result = new StringBuilder(description.TrimEnd());
-            bool russian = culture.TwoLetterISOLanguageName == "ru";
-            result.Append("\n\n<b>").Append(russian
-                ? "Расчёт с модификаторами" : "Modifier breakdown").Append("</b>");
+            result.Append("\n\n<b>").Append(TooltipText.Get(culture, "Heading")).Append("</b>");
             var totals = new Dictionary<string, int>(StringComparer.Ordinal);
             var occurrences = new Dictionary<string, int>(StringComparer.Ordinal);
             foreach (var row in rows)
@@ -107,7 +104,7 @@ namespace EffectBreakdown
                 {
                     occurrences.TryGetValue(row.Label, out int index);
                     occurrences[row.Label] = index + 1;
-                    result.Append(russian ? " · эффект " : " · effect ").Append(index + 1);
+                    result.Append(" · ").Append(TooltipText.Format(culture, "EffectNumber", index + 1));
                 }
                 result.Append("</b>  ")
                     .Append(ValueColors.Replace(row.Baseline, "").Trim()).Append(" → ");
