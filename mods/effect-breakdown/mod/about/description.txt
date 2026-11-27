@@ -1,12 +1,56 @@
 [h1]Русский[/h1]
 Effect Breakdown добавляет расчёт исцеления, барьеров, урона и перезарядки в подсказки воспоминаний и эссенций в забеге и в «Дежавю», а также при выборе воспоминаний путешественника в лобби. Мод перечисляет источники поправок и выделяет красным ухудшение результата. Исцеление и барьеры рассчитаны для владельца, а условный урон помечен по типу цели.
 
-Расчёт автоматически отображается на языке игры. Поддерживаются все 13 языков.
+Расчёт автоматически отображается на языке игры.
 
 [h1]English[/h1]
 Effect Breakdown adds healing, barrier, damage, and cooldown estimates to Memory and Essence tooltips during a run, in Déjà Vu, and when choosing Traveler Memories in the lobby. It names the modifiers and highlights penalties in red. Healing and barrier estimates apply to the owner, and conditional damage lists its target type.
 
-The breakdown automatically uses the game’s language. All 13 languages are supported.
+The breakdown automatically uses the game’s language.
+
+[h1]Deutsch[/h1]
+
+Die Tooltips für Erinnerungen und Essenzen zeigen Heilung, Barrieren, Schaden und Abklingzeit mit den aktuellen Modifikatoren. Das gilt im Lauf, in Déjà-vu und bei der Auswahl von Reisenden-Erinnerungen in der Lobby. Die Quellen stehen dabei, schlechtere Werte sind rot. Heilung und Barrieren gelten für den Besitzer. Bedingter Schaden nennt den Zieltyp.
+
+[h1]Español (Latinoamérica)[/h1]
+
+Las descripciones de recuerdos y esencias muestran la curación, las barreras, el daño y el tiempo de reutilización con los modificadores activos. Puedes ver el cálculo en la partida, en Déjà Vu y al elegir recuerdos del viajero en el lobby. Se muestran las fuentes y los empeoramientos salen en rojo. La curación y las barreras se calculan para el portador. El daño condicional indica el tipo de objetivo.
+
+[h1]Français[/h1]
+
+Les infobulles des souvenirs et des essences affichent le calcul des soins, des boucliers, des dégâts et du temps de recharge. Le calcul apparaît en partie, dans Déjà-vu et lors du choix des souvenirs du voyageur dans le salon. Les sources sont indiquées et les valeurs moins favorables sont en rouge. Les soins et les boucliers sont calculés pour le porteur. Les dégâts conditionnels indiquent le type de cible.
+
+[h1]Italiano[/h1]
+
+Le descrizioni di ricordi ed essenze mostrano il calcolo di cure, barriere, danni e tempi di recupero. Lo vedi in partita, in Déjà Vu e quando scegli i ricordi del viaggiatore nella lobby. Il mod indica da dove vengono le modifiche e mostra in rosso i valori peggiorati. Cure e barriere sono calcolate per il portatore. Per i danni condizionali è indicato il tipo di bersaglio.
+
+[h1]日本語[/h1]
+
+記憶とエッセンスの説明に、回復、バリア、ダメージ、クールダウンの計算を表示します。プレイ中、デジャヴ、ロビーで旅人の記憶を選ぶときに確認できます。補正の出どころを表示し、不利な結果は赤で示します。回復とバリアは装備者に対する値です。条件付きのダメージには対象の種類を表示します。
+
+[h1]한국어[/h1]
+
+기억과 정수의 툴팁에 치유, 보호막, 피해, 재사용 대기시간 계산이 표시됩니다. 플레이 중, 데자뷔, 로비에서 여행자의 기억을 고를 때 확인할 수 있습니다. 변경 요인이 표시되며 불리한 결과는 빨간색으로 보입니다. 치유와 보호막은 소유자 기준으로 계산합니다. 조건부 피해에는 대상 유형이 표시됩니다.
+
+[h1]Polski[/h1]
+
+Podpowiedzi wspomnień i esencji pokazują obliczenia leczenia, tarcz, obrażeń i czasu odnowienia. Są dostępne w trakcie gry, w Déjà Vu i przy wyborze wspomnień podróżnika w poczekalni. Widać źródła zmian, a gorsze wyniki są czerwone. Leczenie i tarcze są liczone dla właściciela. Obrażenia warunkowe mają oznaczony typ celu.
+
+[h1]Português (Brasil)[/h1]
+
+As dicas de memórias e essências mostram o cálculo de cura, barreiras, dano e tempo de recarga. Dá para ver o cálculo durante a partida, no Déjà Vu e ao escolher memórias do viajante no lobby. As fontes aparecem e os resultados piores ficam em vermelho. A cura e as barreiras são calculadas para o dono. O dano condicional mostra o tipo de alvo.
+
+[h1]Türkçe[/h1]
+
+Hafıza ve öz açıklamalarında iyileştirme, bariyer, hasar ve bekleme süresi hesabı gösterilir. Hesabı oyun sırasında, Déjà Vu’da ve lobide gezgin hafızalarını seçerken görebilirsin. Değişikliğin kaynakları gösterilir ve daha kötü sonuçlar kırmızı renktedir. İyileştirme ve bariyer sahibine göre hesaplanır. Koşullu hasarda hedef türü belirtilir.
+
+[h1]简体中文[/h1]
+
+记忆和精华的提示会显示治疗、护盾、伤害和冷却时间的计算结果。你可以在对局中、Déjà Vu 和大厅选择旅人记忆时查看。提示会列出修正来源，变差的结果用红色标出。治疗和护盾按拥有者计算，条件伤害会标明目标类型。
+
+[h1]繁體中文[/h1]
+
+記憶和精華的提示會顯示治療、護盾、傷害和冷卻時間的計算結果。你可以在對局中、Déjà Vu 和大廳選擇旅人記憶時查看。提示會列出修正來源，變差的結果以紅色標示。治療和護盾以擁有者為準，條件傷害會標明目標類型。
 
 [h1]Демонстрация / Gameplay[/h1]
 Подсказки в лобби и «Дежавю». / Tooltips in the lobby and Déjà Vu.

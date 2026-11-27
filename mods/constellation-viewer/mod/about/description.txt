@@ -2,9 +2,57 @@
 
 Посмотрите, какие звёзды выбраны у вашего персонажа, прямо во время забега. Нажмите [b]Созвездия[/b] рядом с панелью характеристик и наведите курсор на звезду. Описание учитывает её текущий уровень и показывает штраф, если звезда установлена в слот другого типа. Окно доступно только для просмотра.
 
+Окно созвездий автоматически использует язык игры.
+
 [h2]English[/h2]
 
 See which constellation stars your Traveler has equipped during a run. Click [b]Constellations[/b] beside the character stats and hover over a star. Its description shows the effect at the equipped level, including any penalty from a mismatched slot. The window is read-only.
+
+The constellation window automatically uses the game’s language.
+
+[h2]Deutsch[/h2]
+
+Klicke während eines Laufs neben den Charakterwerten auf „Konstellationen“. Zeige mit der Maus auf einen Stern, um seinen Effekt auf der aktuellen Stufe zu sehen. Das Fenster zeigt auch den Malus für einen unpassenden Platz. Du kannst die Auswahl hier ansehen.
+
+[h2]Español (Latinoamérica)[/h2]
+
+Durante una partida, haz clic en «Constelaciones» junto a las estadísticas. Pasa el cursor sobre una estrella para ver su efecto en el nivel actual y la penalización si está en una ranura de otro tipo. La ventana sirve para consultar tus estrellas.
+
+[h2]Français[/h2]
+
+En cours de partie, cliquez sur « Constellations » à côté des statistiques. Survolez une étoile pour voir son effet au niveau actuel et le malus si l’emplacement est d’un autre type. Cette fenêtre sert à consulter vos étoiles.
+
+[h2]Italiano[/h2]
+
+Durante la partita, fai clic su «Costellazioni» accanto alle statistiche. Passa il puntatore su una stella per vedere l’effetto al livello attuale e la penalità se lo slot è di un altro tipo. La finestra serve a consultare le stelle equipaggiate.
+
+[h2]日本語[/h2]
+
+プレイ中にステータス欄の横にある「星座」を押します。星にカーソルを合わせると、現在のレベルでの効果と、異なる種類のスロットに装備したときのペナルティが表示されます。このウィンドウで装備中の星を確認できます。
+
+[h2]한국어[/h2]
+
+플레이 중 능력치 창 옆의 ‘별자리’를 클릭하세요. 별 위에 커서를 올리면 현재 레벨의 효과와 다른 유형의 슬롯에 장착했을 때의 불이익을 볼 수 있습니다. 이 창에서 장착한 별을 확인할 수 있습니다.
+
+[h2]Polski[/h2]
+
+Podczas rozgrywki kliknij „Konstelacje” obok statystyk postaci. Najedź kursorem na gwiazdę, aby zobaczyć efekt na obecnym poziomie i karę za gniazdo innego typu. W tym oknie możesz przejrzeć wyposażone gwiazdy.
+
+[h2]Português (Brasil)[/h2]
+
+Durante uma partida, clique em “Constelações” ao lado dos atributos do personagem. Passe o cursor sobre uma estrela para ver o efeito no nível atual e a penalidade por usar um espaço de outro tipo. A janela serve para consultar suas estrelas.
+
+[h2]Türkçe[/h2]
+
+Oyun sırasında karakter istatistiklerinin yanındaki “Takımyıldızlar” düğmesine tıkla. Güncel seviyedeki etkiyi ve farklı türde bir yuvanın cezasını görmek için imleci bir yıldızın üzerine getir. Bu pencerede kuşanılan yıldızları görebilirsin.
+
+[h2]简体中文[/h2]
+
+在一局游戏中，点击角色属性旁的“星座”。将鼠标指向星星，即可看到当前等级的效果，以及放入不同类型插槽时的惩罚。这个窗口可查看已装备的星星。
+
+[h2]繁體中文[/h2]
+
+在一局遊戲中，點選角色屬性旁的「星座」。將游標指向星星，即可看到目前等級的效果，以及放入不同類型欄位時的懲罰。這個視窗可查看已裝備的星星。
 
 [h2]Демонстрация / Gameplay[/h2]
 
