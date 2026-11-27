@@ -1,5 +1,59 @@
 # Изменения для Steam Workshop / Steam Workshop changelog
 
+## Effect Breakdown 1.0.1
+
+**Русский**
+
+- В меню «Настройки → Моды → Effect Breakdown» появилась галочка, которая скрывает всплывающие уведомления о подборе и улучшении воспоминаний и эссенций.
+
+**English**
+
+- Added an option under Settings → Mods → Effect Breakdown to hide pop-up notifications when picking up or upgrading Memories and Essences.
+
+**Deutsch**
+
+- In den Mod-Einstellungen lassen sich die Einblendungen beim Aufsammeln und Verbessern von Erinnerungen und Essenzen ausblenden.
+
+**Español (Latinoamérica)**
+
+- En los ajustes del mod puedes ocultar los avisos que aparecen al recoger o mejorar recuerdos y esencias.
+
+**Français**
+
+- Les paramètres du mod permettent de masquer les notifications qui apparaissent à la collecte ou à l’amélioration des souvenirs et des essences.
+
+**Italiano**
+
+- Nelle impostazioni del mod puoi nascondere le notifiche che appaiono quando raccogli o migliori ricordi ed essenze.
+
+**日本語**
+
+- MOD設定で、記憶やエッセンスを拾ったときや強化したときのポップアップ通知を非表示にできます。
+
+**한국어**
+
+- 모드 설정에서 기억이나 정수를 획득하거나 강화할 때 나타나는 팝업 알림을 숨길 수 있습니다.
+
+**Polski**
+
+- W ustawieniach moda możesz ukryć wyskakujące powiadomienia o podnoszeniu i ulepszaniu wspomnień oraz esencji.
+
+**Português (Brasil)**
+
+- Nas configurações do mod, você pode ocultar as notificações que aparecem ao coletar ou melhorar memórias e essências.
+
+**Türkçe**
+
+- Mod ayarlarından anı ve öz toplarken veya geliştirirken çıkan bildirimleri gizleyebilirsin.
+
+**简体中文**
+
+- 可在模组设置中隐藏拾取或升级记忆和精华时出现的弹窗通知。
+
+**繁體中文**
+
+- 可在模組設定中隱藏拾取或升級記憶和精華時出現的彈出通知。
+
 ## Effect Breakdown 1.0.0
 
 **Русский**
